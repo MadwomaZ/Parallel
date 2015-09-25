@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <vector>
 #include <thread>
+#include <mutex>
 
 using namespace std;
 
@@ -11,6 +12,7 @@ void *massive(int i);
 
 int **mass = new int* [6]; // две строки в массиве
 
+std::mutex barrier;
 
 void bubbleSort(int* arrayPtr, int length_array)
 {
@@ -33,7 +35,7 @@ void bubbleSort(int* arrayPtr, int length_array)
 
 int main()
 {
-	    for (int count = 0; count < 6; count++)
+	for (int count = 0; count < 6; count++)
 		{
 	        	mass[count] = new int [6];
 		}
@@ -46,6 +48,7 @@ int main()
 		std::cout << std::endl;
 	}
 	std::vector<std::thread> t;
+
 	for (int i = 0; i < 6; i++)
 	{
 		t.push_back(thread(&massive, i));
@@ -70,6 +73,7 @@ int main()
 
 void *massive(int i)
 {
+	barrier.lock();
 	for (int i = 0; i < 6; i++)
 	{
 		for (int j = 0; j < 6; j++)
@@ -77,5 +81,6 @@ void *massive(int i)
 			bubbleSort(mass[j], 6);
 		}
 	}
+	barrier.unlock();
         	
 }
