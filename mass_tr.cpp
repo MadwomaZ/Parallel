@@ -1,3 +1,6 @@
+/*Autor: Alginina Evgeniya 
+/*Программа сортирует стоблцы массива 6х6, заполненный псевдослучайными числами, методом пузырька. Где каждый столбец сортируется отдельно в своем потоке.
+*/
 #include <iostream>
 #include <ctime>
 #include <iomanip>
@@ -12,9 +15,9 @@ void *massive(int i);
 
 int **mass = new int* [6]; // две строки в массиве
 
-std::mutex barrier;
+std::mutex barrier; //Объявление мьютекса
 
-void bubbleSort(int* arrayPtr, int length_array)
+void bubbleSort(int* arrayPtr, int length_array) //реализация метода пузырька
 {
  int temp = 0;
  bool exit = false;
@@ -43,11 +46,11 @@ int main()
 	{
 		for (int j = 0; j < 6; j++)
 		{
-			mass[i][j] = rand() % 100 + 1;
+			mass[i][j] = rand() % 100 + 1; //Заполнение массива случайными числами
 		}
 		std::cout << std::endl;
 	}
-	std::vector<std::thread> t;
+	std::vector<std::thread> t; //вектор потоков
 
 	for (int i = 0; i < 6; i++)
 	{
@@ -66,7 +69,7 @@ int main()
 		}
 		std::cout << std::endl;
 	}
-	std::cout << "\nruntime = " << clock()/1000.0 << std::endl;
+	std::cout << "\nruntime = " << clock()/1000.0 << std::endl; //Печатает время работы программы
 
 	return 0;
 }
@@ -78,7 +81,7 @@ void *massive(int i)
 	{
 		for (int j = 0; j < 6; j++)
 		{
-			bubbleSort(mass[j], 6);
+			bubbleSort(mass[j], 6); //Сортировка массива
 		}
 	}
 	barrier.unlock();
